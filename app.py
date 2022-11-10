@@ -19,12 +19,12 @@ db = SQLAlchemy(app)
 #portfolio model
 class Portfolio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
+    title = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(120), nullable=False)
     image = db.Column(db.String(120), nullable=False)
 
-    def __init__(self, name, description, image):
-        self.name = name
+    def __init__(self, title, description, image):
+        self.title = title
         self.description = description
         self.image = image
 
@@ -34,16 +34,16 @@ class Portfolio(db.Model):
 #home route
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('index.html')
 
 #create route
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
-        if not request.form['name'] or not request.form['description'] or not request.form['image']:
+        if not request.form['title'] or not request.form['description'] or not request.form['image']:
             flash('Please enter all the fields', 'error')
         else:
-            portfolio = Portfolio(request.form['name'], request.form['description'], request.form['image'])
+            portfolio = Portfolio(request.form['title'], request.form['description'], request.form['image'])
 
             db.session.add(portfolio)
             db.session.commit()
@@ -65,7 +65,7 @@ def detail(id):
 def edit(id):
     portfolio = Portfolio.query.get(id)
     if request.method == 'POST':
-        portfolio.name = request.form['name']
+        portfolio.title = request.form['title']
         portfolio.description = request.form['description']
         portfolio.image = request.form['image']
 
