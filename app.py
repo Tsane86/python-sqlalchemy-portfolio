@@ -35,33 +35,35 @@ class Portfolio(db.Model):
 @app.route('/')
 def home():
     return render_template('index.html')
+    #return render_template('index.html', portfolio=Portfolio.query.all())
 
 #create route
-@app.route('/create', methods=['GET', 'POST'])
+@app.route('/new', methods=['GET', 'POST'])
 def create():
-    if request.method == 'POST':
-        if not request.form['title'] or not request.form['description'] or not request.form['image']:
-            flash('Please enter all the fields', 'error')
-        else:
-            portfolio = Portfolio(request.form['title'], request.form['description'], request.form['image'])
+    # if request.method == 'POST':
+    #     if not request.form['title'] or not request.form['description'] or not request.form['image']:
+    #         flash('Please enter all the fields', 'error')
+    #     else:
+    #         portfolio = Portfolio(request.form['title'], request.form['description'], request.form['image'])
 
-            db.session.add(portfolio)
-            db.session.commit()
-            flash('Record was successfully added')
-            return redirect(url_for('home'))
-    return render_template('create.html')
+    #         db.session.add(portfolio)
+    #         db.session.commit()
+    #         flash('Record was successfully added')
+    #         return redirect(url_for('home'))
+    return render_template('projectform.html')
 
 #detail route
-@app.route('/detail/<int:id>')
-def detail(id):
-    portfolio = Portfolio.query.get(id)
-    return render_template('detail.html', portfolio=portfolio)
+@app.route('/details')
+def detail():
+    #portfolio = Portfolio.query.get(id)
+    #return render_template('detail.html', portfolio=portfolio)
+    return render_template('detail.html')
 
 #add route
 
 
 #edit route
-@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/<int:id>/edit', methods=['GET', 'POST'])
 def edit(id):
     portfolio = Portfolio.query.get(id)
     if request.method == 'POST':
@@ -72,18 +74,18 @@ def edit(id):
         db.session.commit()
         flash('Record was successfully updated')
         return redirect(url_for('home'))
-    return render_template('edit.html', portfolio=portfolio)
+    #return render_template('edit.html', portfolio=portfolio)
 
 #delete route
-@app.route('/delete/<int:id>', methods=['GET', 'POST'])
+@app.route('/<int:id>/delete', methods=['GET', 'POST'])
 def delete(id):
     portfolio = Portfolio.query.get(id)
     db.session.delete(portfolio)
     db.session.commit()
-    flash('Record was successfully deleted')
+    flash('Deleted Record!')
     return redirect(url_for('home'))
 
 #dunder main
 if __name__ == '__main__':
     #run the app
-    app.run(debug=True)
+    app.run(debug=True, port=8000, host='127.0.0.1')
