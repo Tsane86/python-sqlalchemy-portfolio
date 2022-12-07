@@ -5,20 +5,18 @@ from flask import (render_template, request, redirect, url_for, flash)
 #home route
 @app.route('/')
 def home():
-    return render_template('index.html')
+    portfolio_items = Portfolio.query.all()
+    return render_template('index.html', portfolio_items=portfolio_items)
     #return render_template('index.html', portfolio=Portfolio.query.all())
 
 #create route
 @app.route('/new', methods=['GET', 'POST'])
 def create():
     print(request.form)
-    #TODO why wont this post? check database model to see if set correctly
     #if form has has title, date, description, skills and github link then submit to database
-    
     if request.form:
-            datetoconvert = request.form['date'] + "-01"
-            dateToUse = get_datetime_from_date_string(datetoconvert)
-            print(dateToUse)
+            dateToUse = get_datetime_from_date_string(
+                request.form['date'] + "-01")
             portfolio = Portfolio(title=request.form['title'], date=dateToUse, description=request.form['desc'], skills=request.form['skills'], githuburl=request.form['github'])
             db.session.add(portfolio)
             db.session.commit()
@@ -58,5 +56,6 @@ def delete(id):
 #dunder main
 if __name__ == '__main__':
     #run the app
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True, port=8000, host='127.0.0.1')
