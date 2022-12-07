@@ -38,9 +38,7 @@ def edit(id):
         portfolio.title = request.form['title']
         portfolio.description = request.form['description']
         portfolio.image = request.form['image']
-
         db.session.commit()
-        flash('Record was successfully updated')
         return redirect(url_for('home'))
     #return render_template('edit.html', portfolio=portfolio)
 
