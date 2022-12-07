@@ -9,11 +9,11 @@
         <h1>New Project</h1>
     </section>
     <section id="form">
-        <form action="">
+        <form action="{{url_for('create')}}" method="POST">
             <label for="title">Project Title</label>
             <input type="text" name="title" id="title" placeholder="Project Name" required>
             <label for="date">Completion Date</label>
-            <input type="month" name="date" id="date" required>
+            <input type="month" name="date" id="date">
             <label for="description">Description</label>
             <textarea name="desc" id="description" cols="30" rows="20" placeholder="Description" required></textarea>
             <label for="skills-list" id="skills-label">Skills</label>

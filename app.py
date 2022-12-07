@@ -1,35 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
-import datetime
-import time
+from models import db, Portfolio, app, get_datetime_from_date_string
+from flask import (render_template, request, redirect, url_for, flash)
 
-from sqlalchemy import create_engine, Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
-# create the app
-app = Flask(__name__)
-
-
-#config database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolio.db'
-db = SQLAlchemy(app)
-
-
-#portfolio model
-class Portfolio(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.String(120), nullable=False)
-    image = db.Column(db.String(120), nullable=False)
-
-    def __init__(self, title, description, image):
-        self.title = title
-        self.description = description
-        self.image = image
-
-    def __repr__(self):
-        return '<Portfolio %r>' % self.name % self.description
 
 #home route
 @app.route('/')
@@ -40,16 +11,18 @@ def home():
 #create route
 @app.route('/new', methods=['GET', 'POST'])
 def create():
-    # if request.method == 'POST':
-    #     if not request.form['title'] or not request.form['description'] or not request.form['image']:
-    #         flash('Please enter all the fields', 'error')
-    #     else:
-    #         portfolio = Portfolio(request.form['title'], request.form['description'], request.form['image'])
-
-    #         db.session.add(portfolio)
-    #         db.session.commit()
-    #         flash('Record was successfully added')
-    #         return redirect(url_for('home'))
+    print(request.form)
+    #TODO why wont this post? check database model to see if set correctly
+    #if form has has title, date, description, skills and github link then submit to database
+    
+    if request.form:
+            datetoconvert = request.form['date'] + "-01"
+            dateToUse = get_datetime_from_date_string(datetoconvert)
+            print(dateToUse)
+            portfolio = Portfolio(title=request.form['title'], date=dateToUse, description=request.form['desc'], skills=request.form['skills'], githuburl=request.form['github'])
+            db.session.add(portfolio)
+            db.session.commit()
+            return redirect(url_for('home'))
     return render_template('projectform.html')
 
 #detail route
@@ -58,9 +31,6 @@ def detail():
     #portfolio = Portfolio.query.get(id)
     #return render_template('detail.html', portfolio=portfolio)
     return render_template('detail.html')
-
-#add route
-
 
 #edit route
 @app.route('/<int:id>/edit', methods=['GET', 'POST'])
@@ -88,4 +58,5 @@ def delete(id):
 #dunder main
 if __name__ == '__main__':
     #run the app
+    db.create_all()
     app.run(debug=True, port=8000, host='127.0.0.1')
