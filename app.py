@@ -7,13 +7,11 @@ from flask import (render_template, request, redirect, url_for, flash)
 def home():
     portfolio_items = Portfolio.query.all()
     return render_template('index.html', portfolio_items=portfolio_items)
-    #return render_template('index.html', portfolio=Portfolio.query.all())
 
 #create route
 @app.route('/new', methods=['GET', 'POST'])
 def create():
     print(request.form)
-    #if form has has title, date, description, skills and github link then submit to database
     if request.form:
             dateToUse = get_datetime_from_date_string(
                 request.form['date'] + "-01")
