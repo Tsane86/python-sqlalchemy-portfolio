@@ -40,7 +40,7 @@
         <div id="project-list">
             {% for item in portfolio_items %}
                 <div class="a-project">
-                    <h3>{{ item.title }}</h3>
+                    <a href="{{ url_for('detail', id=item.id)}}"><h3>{{ item.title }}</h3></a>
                     <a href="{{ item.github }}" class="github-btn">
                         <i class="fab fa-github"></i>
                         View on GitHub

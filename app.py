@@ -24,31 +24,33 @@ def create():
     return render_template('projectform.html')
 
 #detail route
-@app.route('/details')
-def detail():
-    #portfolio = Portfolio.query.get(id)
-    #return render_template('detail.html', portfolio=portfolio)
-    return render_template('detail.html')
+@app.route('/<id>')
+def detail(id):
+    portfolio_item = Portfolio.query.get(id)
+    return render_template('detail.html', portfolio_item=portfolio_item)
 
 #edit route
-@app.route('/<int:id>/edit', methods=['GET', 'POST'])
+@app.route('/<id>/edit', methods=['GET', 'POST'])
 def edit(id):
-    portfolio = Portfolio.query.get(id)
-    if request.method == 'POST':
-        portfolio.title = request.form['title']
-        portfolio.description = request.form['description']
-        portfolio.image = request.form['image']
+    portfolio_item = Portfolio.query.get(id)
+    if request.form:
+        dateToUse = get_datetime_from_date_string(
+            request.form['date'] + "-01")
+        portfolio_item.title = request.form['title']
+        portfolio_item.date = dateToUse
+        portfolio_item.description = request.form['desc']
+        portfolio_item.skills = request.form['skills']
+        portfolio_item.githuburl = request.form['github']
         db.session.commit()
         return redirect(url_for('home'))
-    #return render_template('edit.html', portfolio=portfolio)
+    return render_template('edit.html', portfolio_item=portfolio_item)
 
 #delete route
-@app.route('/<int:id>/delete', methods=['GET', 'POST'])
+@app.route('/<id>/delete', methods=['GET', 'POST'])
 def delete(id):
     portfolio = Portfolio.query.get(id)
     db.session.delete(portfolio)
     db.session.commit()
-    flash('Deleted Record!')
     return redirect(url_for('home'))
 
 #dunder main

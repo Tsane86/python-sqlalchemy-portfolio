@@ -1,42 +1,31 @@
 {% extends 'layout.html'%}
 
 {% block button %}
-    <a class="nav-link" href="{{ url_for('create') }}">Add Project</a>
+    <a class="nav-link" href="{{ url_for('home') }}">Back</a>
 {% endblock %}
 
 {% block content %}
     <section class="header">
-        <h1>{{portfolio_item.title}}</h1>
-        <p>{{portfolio_item.date}}</p>
-        <a href="{{portfolio_item.githuburl}}" class="github-btn">
-            <i class="fab fa-github"></i>
-            View on GitHub
-        </a>
-        <ul class="project-skills">
+        <h1>New Project</h1>
+    </section>
+    <section id="form">
+        <form action="{{url_for('edit', id=portfolio_item.id)}}" method="POST">
+            <label for="title">Project Title</label>
+            <input type="text" name="title" id="title" placeholder="Project Name" required value="{{ portfolio_item.title }}">
+            <label for="date">Completion Date</label>
+            <input type="month" name="date" id="date" required value="{{ portfolio_item.date.strftime('%Y-%m') }}">
+            <label for="description">Description</label>
+            <textarea name="desc" id="description" cols="30" rows="20" placeholder="Description" required>{{portfolio_item.description}}</textarea>
+            <label for="skills-list" id="skills-label">Skills</label>
+            <p>Separate each skill by a comma</p>
+            <textarea name="skills" id="skills-list" cols="30" rows="10" placeholder="Skill, Skill" required >{{portfolio_item.skills}}</textarea>
+            <label for="github">GitHub Link</label>
+            <input type="url" name="github" id="github" placeholder="Link to the repo" required value="{{ portfolio_item.githuburl }}">
             <div>
-            {% for item_skill in portfolio_item.skills.split(', ') %}
-            <li>{{item_skill}}</li>
-            {% endfor %}
+                <button type="reset">Cancel</button>
+                <button type="submit">Submit</button>
             </div>
-        </ul>
-    </section>
-    <section id="project-desc">
-        <div id="triangle5"></div>
-        <h2>Description</h2>
-        <p>
-            {{portfolio_item.description}}
-        </p>
-        <div id="triangle6"></div>
-    </section>
-    <section id="edit-delete">
-        <a href="{{ url_for('edit', id=portfolio_item.id) }}">
-            <i class="fas fa-edit"></i>
-            Edit
-        </a>
-        <a href="{{ url_for('delete', id=portfolio_item.id)}}">
-            <i class="far fa-trash-alt"></i>
-            Delete
-        </a>
+        </form>
     </section>
     <section class="footer">
         <div class="socials">
