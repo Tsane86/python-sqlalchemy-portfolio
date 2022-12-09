@@ -41,7 +41,7 @@
             {% for item in portfolio_items %}
                 <div class="a-project">
                     <a href="{{ url_for('detail', id=item.id)}}"><h3>{{ item.title }}</h3></a>
-                    <a href="{{ item.github }}" class="github-btn">
+                    <a href="{{ item.githuburl }}" class="github-btn">
                         <i class="fab fa-github"></i>
                         View on GitHub
                     </a>
@@ -60,14 +60,11 @@
         <i class="fas fa-paper-plane"></i>
         <h2>Contact Me</h2>
         <p>
-            Pastry wafer chocolate cake caramels. 
-            Gummi bears pudding sugar plum macaroon. 
-            Cake tart apple pie soufflé sweet sweet. 
-            Topping bear claw lemon drops gingerbread biscuit pudding fruitcake icing chocolate bar.
+            Feel free to send me an email!
         </p>
         <p>
             <i class="fas fa-envelope"></i>
-            my_email@email.com
+            info@breakdesign.com.au
         </p>
     </section>
     <section class="footer">
